@@ -16,17 +16,21 @@ var FPcounter = 0;
 // this tracks the current sp to cp conversion
 var CPcounter = 0;
 
+var SPcounter = 0;
+
+var Ccounter = 0;
+
 var value = 0;
 var value1 = 0;
 
 var maxrooms = 5
 
-var counterids = ['FPcounter', 'CPcounter']
-var counterbuttons = ['FPconvert', 'CPconvert']
-var counteradd = ['addFP', 'addCP']
-var counterremove = ['removeFP', 'removeCP']
-var counternames = ['+0 FP -0 CP', '+0 CP -0 FP']
-var countervars = [FPcounter, CPcounter]
+var counterids = ['FPcounter', 'CPcounter', 'SPcounter', 'Ccounter']
+var counterbuttons = ['FPconvert', 'CPconvert', 'SPconvert', 'Cconvert']
+var counteradd = ['addFP', 'addCP', 'addSP', 'addC']
+var counterremove = ['removeFP', 'removeCP', 'removeSP', 'removeC']
+var counternames = ['+0 FP -0 CP', '+0 CP -0 FP', '+0 SP -0 CP', '+0 Credits -0 CP']
+var countervars = [FPcounter, CPcounter, SPcounter, Ccounter]
 var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 window.onload = function () {
@@ -85,6 +89,40 @@ window.onload = function () {
 
     // this does exactly what the function above does but it also prevents the section from closing if the open all button is selected when you unselect a menu button
     maintab.oninput = function () {
+      document.querySelectorAll('.svg').forEach(e => e.remove());
+      if (document.getElementById('skills').checked || document.getElementById('openall').checked) {
+        setTimeout(function(){
+          for (var i = 0; i < 99; i++) {
+            var connect = "connect" + i;
+            var end = "end" + i;
+            for (var x = 0; x < document.getElementsByClassName(end).length; x++) {
+              if (document.getElementsByClassName(connect)[x] != undefined) {var start = document.getElementsByClassName(connect)[x]}
+              var finish = document.getElementsByClassName(end)[x]
+              var startxpos = start.getBoundingClientRect().left + start.offsetWidth/2
+              var startypos = start.getBoundingClientRect().top + window.scrollY + start.offsetHeight/2
+              var finishxpos = finish.getBoundingClientRect().left + finish.offsetWidth/2
+              var finishypos = finish.getBoundingClientRect().top + window.scrollY + finish.offsetHeight/2
+              var angleDeg = Math.atan2(startypos - finishypos, startxpos - finishxpos) * 180 / Math.PI + 90;
+              const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+              svg.setAttribute("height", Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 4);
+              svg.setAttribute("width", "100%");
+              svg.style.top = `${start.getBoundingClientRect().top + window.scrollY + start.offsetHeight - 2}px`;
+              svg.style.position = 'absolute'
+              svg.style.zIndex = '1'
+              svg.classList.add("svg");
+              body.appendChild(svg);
+              const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+              // polygon.setAttribute('points', ((startxpos + finishxpos)/2 - 40) + ',' + -1 + ' ' + ((startxpos + finishxpos)/2 - 40) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2 + 40) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2 + 40) + ',' + -1)
+              polygon.setAttribute('points', ((startxpos + finishxpos)/2) + ',' + -1 + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2) + ',' + -1)
+              if (connect == "connect34") {
+                polygon.setAttribute('points', (startxpos + start.offsetWidth/5) + ',' + -1 + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (startxpos + start.offsetWidth/5) + ',' + -1)
+              }
+              polygon.style = 'fill:rgb(0, 0, 0); stroke:rgb(253, 253, 253); stroke-width:2px;'
+              svg.appendChild(polygon);
+            }
+          }
+        }, 1)
+      }
       var section = this.id;
       if (this.checked == true) document.getElementsByClassName(section)[0].classList.remove('hide');
       else if (document.getElementById('openall').checked == false) { document.getElementsByClassName(section)[0].classList.add('hide'); }
@@ -284,6 +322,76 @@ window.onload = function () {
   //   cost1.innerHTML = "Cost: " + Math.round(price1[i]/2) + " FP"
   // }
 }
+document.getElementById('skills').onclick = function() {
+  document.querySelectorAll('.svg').forEach(e => e.remove());
+  if (document.getElementById('skills').checked || document.getElementById('openall').checked) {
+    setTimeout(function(){
+      for (var i = 0; i < 99; i++) {
+        var connect = "connect" + i;
+        var end = "end" + i;
+        for (var x = 0; x < document.getElementsByClassName(end).length; x++) {
+          if (document.getElementsByClassName(connect)[x] != undefined) {var start = document.getElementsByClassName(connect)[x]}
+          var finish = document.getElementsByClassName(end)[x]
+          var startxpos = start.getBoundingClientRect().left + start.offsetWidth/2
+          var startypos = start.getBoundingClientRect().top + window.scrollY + start.offsetHeight/2
+          var finishxpos = finish.getBoundingClientRect().left + finish.offsetWidth/2
+          var finishypos = finish.getBoundingClientRect().top + window.scrollY + finish.offsetHeight/2
+          var angleDeg = Math.atan2(startypos - finishypos, startxpos - finishxpos) * 180 / Math.PI + 90;
+          const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          svg.setAttribute("height", Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 4);
+          svg.setAttribute("width", "100%");
+          svg.style.top = `${start.getBoundingClientRect().top + window.scrollY + start.offsetHeight - 2}px`;
+          svg.style.position = 'absolute'
+          svg.style.zIndex = '1'
+          svg.classList.add("svg");
+          body.appendChild(svg);
+          const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+          // polygon.setAttribute('points', ((startxpos + finishxpos)/2 - 40) + ',' + -1 + ' ' + ((startxpos + finishxpos)/2 - 40) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2 + 40) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2 + 40) + ',' + -1)
+          polygon.setAttribute('points', ((startxpos + finishxpos)/2) + ',' + -1 + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2) + ',' + -1)
+          if (connect == "connect34") {
+            polygon.setAttribute('points', (startxpos + start.offsetWidth/5) + ',' + -1 + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (startxpos + start.offsetWidth/5) + ',' + -1)
+          }
+          polygon.style = 'fill:rgb(0, 0, 0); stroke:rgb(253, 253, 253); stroke-width:2px;'
+          svg.appendChild(polygon);
+        }
+      }
+    }, 1)
+  }
+}
+window.onresize = function(){
+  document.querySelectorAll('.svg').forEach(e => e.remove());
+  if (document.getElementById('skills').checked || document.getElementById('openall').checked) {
+    for (var i = 0; i < 99; i++) {
+      var connect = "connect" + i;
+      var end = "end" + i;
+      for (var x = 0; x < document.getElementsByClassName(end).length; x++) {
+        if (document.getElementsByClassName(connect)[x] != undefined) {var start = document.getElementsByClassName(connect)[x]}
+        var finish = document.getElementsByClassName(end)[x]
+        var startxpos = start.getBoundingClientRect().left + start.offsetWidth/2
+        var startypos = start.getBoundingClientRect().top + window.scrollY + start.offsetHeight/2
+        var finishxpos = finish.getBoundingClientRect().left + finish.offsetWidth/2
+        var finishypos = finish.getBoundingClientRect().top + window.scrollY + finish.offsetHeight/2
+        var angleDeg = Math.atan2(startypos - finishypos, startxpos - finishxpos) * 180 / Math.PI + 90;
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("height", Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 4);
+        svg.setAttribute("width", "100%");
+        svg.style.top = `${start.getBoundingClientRect().top + window.scrollY + start.offsetHeight - 2}px`;
+        svg.style.position = 'absolute'
+        svg.style.zIndex = '1'
+        svg.classList.add("svg");
+        body.appendChild(svg);
+        const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        // polygon.setAttribute('points', ((startxpos + finishxpos)/2 - 40) + ',' + -1 + ' ' + ((startxpos + finishxpos)/2 - 40) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2 + 40) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2 + 40) + ',' + -1)
+        polygon.setAttribute('points', ((startxpos + finishxpos)/2) + ',' + -1 + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2) + ',' + -1)
+        if (connect == "connect34") {
+          polygon.setAttribute('points', (startxpos + start.offsetWidth/5) + ',' + -1 + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (startxpos + start.offsetWidth/5) + ',' + -1)
+        }
+        polygon.style = 'fill:rgb(0, 0, 0); stroke:rgb(253, 253, 253); stroke-width:2px;'
+        svg.appendChild(polygon);
+      }
+    }
+  }
+}
 
 // this changes how many points you have
 function PointChange(SPChange, CChange, FPChange, CPChange, elem) {
@@ -330,7 +438,7 @@ function PointChange(SPChange, CChange, FPChange, CPChange, elem) {
 
 // this just prevents two things that are incompatible with the same thing from conflicting, like if you took both case 53 and servant and unselect one it won't enable handicap
 function multiincompatible(SPChange, CChange, FPChange, CPChange, elem, targets, otherincompatible) {
-  PointChange(SPChange, CChange, SPChange, CChange, FPChange, CPChange, elem)
+  PointChange(SPChange, CChange, FPChange, CPChange, elem)
   for (var i = 0; i < targets.length; ++i) {
     for (var x = 0; x < otherincompatible.length; ++x) {
       if (elem.checked == true || document.getElementById(otherincompatible[x]).checked == true) {
@@ -346,7 +454,7 @@ function multiincompatible(SPChange, CChange, FPChange, CPChange, elem, targets,
 }
 
 function insertcopy(SPChange, CChange, FPChange, CPChange, elem, targets){
-  PointChange(SPChange, CChange, SPChange, CChange, FPChange, CPChange, elem)
+  PointChange(SPChange, CChange, FPChange, CPChange, elem)
   if (elem.checked) {
     document.getElementById(targets).click()
     document.getElementById(targets).disabled = true
@@ -357,7 +465,7 @@ function insertcopy(SPChange, CChange, FPChange, CPChange, elem, targets){
 }
 
 function multirequired(SPChange, CChange, FPChange, CPChange, elem, targets, otherincompatible) {
-  PointChange(SPChange, CChange, SPChange, CChange, FPChange, CPChange, elem)
+  PointChange(SPChange, CChange, FPChange, CPChange, elem)
   for (var i = 0; i < targets.length; ++i) {
     y = 0
     for (var x = 0; x < otherincompatible.length; ++x) {
@@ -377,7 +485,7 @@ function multirequired(SPChange, CChange, FPChange, CPChange, elem, targets, oth
 
 // this enables and disables choices when you select something, used for both requirements and incompatibilities despite the name
 function incompatible(SPChange, CChange, FPChange, CPChange, elem, targets) {
-  PointChange(SPChange, CChange, SPChange, CChange, FPChange, CPChange, elem)
+  PointChange(SPChange, CChange, FPChange, CPChange, elem)
   for (var i = 0; i < targets.length; ++i) {
     if (document.getElementById(targets[i]).disabled == true) {
       document.getElementById(targets[i]).disabled = false
@@ -394,7 +502,7 @@ function incompatible(SPChange, CChange, FPChange, CPChange, elem, targets) {
 
 // this makes requirements for choices that need multiple things, like combo powers, work and it also handles situations where multiple things can work as a requirement
 function multiplerequired(SPChange, CChange, FPChange, CPChange, elem, targets, otherrequirements, optionalrequirements) {
-  PointChange(SPChange, CChange, SPChange, CChange, FPChange, CPChange, elem)
+  PointChange(SPChange, CChange, FPChange, CPChange, elem)
   for (var i = 0; i < targets.length; ++i) {
     if (optionalrequirements != undefined) {
       document.getElementById(targets[i]).disabled = true;
@@ -431,6 +539,9 @@ function multiplerequired(SPChange, CChange, FPChange, CPChange, elem, targets, 
         }
       }
     } else {
+      if (document.getElementById(targets[i]).checked == true) {
+        document.getElementById(targets[i]).click()
+      }
       document.getElementById(targets[i]).disabled = true;
       document.getElementsByName(targets[i])[0].classList.add('disabled');
     }
@@ -439,7 +550,7 @@ function multiplerequired(SPChange, CChange, FPChange, CPChange, elem, targets, 
 
 // this toggles the visibility of a section
 function visible(SPChange, CChange, FPChange, CPChange, elem, targets, incompatibletargets) {
-  PointChange(SPChange, CChange, SPChange, CChange, FPChange, CPChange, elem)
+  PointChange(SPChange, CChange, FPChange, CPChange, elem)
   for (var i = 0; i < targets.length; ++i) {
     if (elem.checked == true) {
       document.getElementsByClassName(targets[i])[0].classList.remove('visible')
@@ -464,7 +575,7 @@ function closepopup() {
   document.querySelectorAll('.dpl').forEach(e => e.remove())
 }
 
-function counter(ind, FPChange, CPChange, SPChange, CChange, limit, add, mult, slot, cost) {
+function counter(ind, SPChange, CChange, FPChange, CPChange, limit, add, mult, slot, cost) {
   if (limit == 'CW') {
     limit = 0
     for (var i = 0; i < document.getElementsByClassName('powerchoice').length; ++i) {
@@ -476,7 +587,7 @@ function counter(ind, FPChange, CPChange, SPChange, CChange, limit, add, mult, s
     if (kisscounter + neutralcounter + killcounter == 10) {limit = 0}
   }
   if ((add == 'add' && countervars[ind] < limit) || (add == 'remove' && countervars[ind] >= mult)) {
-    countervars = [FPcounter, CPcounter]
+    countervars = [FPcounter, CPcounter, SPcounter, Ccounter]
     if (add == 'add') {
       document.getElementById(counterbuttons[ind]).classList.add('activebutton')
     } else if (add == 'remove' && countervars[ind] == mult) {
@@ -529,7 +640,7 @@ function counter(ind, FPChange, CPChange, SPChange, CChange, limit, add, mult, s
     document.getElementById('SP').innerHTML = SP;
     document.getElementById('Credits').innerHTML = Credits;
     document.getElementById(counterids[ind]).innerHTML = countervars[ind];
-    if (ind > 1) {
+    if (ind > 3) {
       if (add == 'add') {
         const button = document.getElementById(counteradd[ind]);
         const circle = document.createElement("span");
@@ -548,6 +659,8 @@ function counter(ind, FPChange, CPChange, SPChange, CChange, limit, add, mult, s
     }
     FPcounter = countervars[0]
     CPcounter = countervars[1]
+    SPcounter = countervars[2]
+    Ccounter = countervars[3]
   }
 }
 
@@ -556,23 +669,57 @@ var ctabs = ['incarnation', 'age', 'sex', 'gender', 'appearance', 'identity', 'c
 document.getElementById('characteropenall').oninput = function () {
   if (this.checked) {
     for (var i = 0; i < ctabs.length; ++i) {
-      document.getElementsByClassName(ctabs[i] + 'section')[0].classList.remove('hide');
+      document.getElementsByClassName(ctabs[i])[0].classList.remove('hide');
     }
   } else {
     for (var i = 0; i < ctabs.length; ++i) {
-      if (document.getElementById(ctabs[i] + 'id').checked == false) document.getElementsByClassName(ctabs[i] + 'section')[0].classList.add('hide');
+      if (document.getElementById(ctabs[i]).checked == false) document.getElementsByClassName(ctabs[i])[0].classList.add('hide');
     }
   }
 }
 var mtabs = ['difficulty', 'forcesensitivity', 'era', 'species', 'scenario', 'alignment', 'character', 'perks', 'social', 'skills', 'forcetechniques', 'forcereliantskills', 'conversion', 'items', 'companions', ]
 document.getElementById('openall').oninput = function () {
+  document.querySelectorAll('.svg').forEach(e => e.remove());
+      if (document.getElementById('skills').checked || document.getElementById('openall').checked) {
+        setTimeout(function(){
+          for (var i = 0; i < 99; i++) {
+            var connect = "connect" + i;
+            var end = "end" + i;
+            for (var x = 0; x < document.getElementsByClassName(end).length; x++) {
+              if (document.getElementsByClassName(connect)[x] != undefined) {var start = document.getElementsByClassName(connect)[x]}
+              var finish = document.getElementsByClassName(end)[x]
+              var startxpos = start.getBoundingClientRect().left + start.offsetWidth/2
+              var startypos = start.getBoundingClientRect().top + window.scrollY + start.offsetHeight/2
+              var finishxpos = finish.getBoundingClientRect().left + finish.offsetWidth/2
+              var finishypos = finish.getBoundingClientRect().top + window.scrollY + finish.offsetHeight/2
+              var angleDeg = Math.atan2(startypos - finishypos, startxpos - finishxpos) * 180 / Math.PI + 90;
+              const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+              svg.setAttribute("height", Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 4);
+              svg.setAttribute("width", "100%");
+              svg.style.top = `${start.getBoundingClientRect().top + window.scrollY + start.offsetHeight - 2}px`;
+              svg.style.position = 'absolute'
+              svg.style.zIndex = '1'
+              svg.classList.add("svg");
+              body.appendChild(svg);
+              const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+              // polygon.setAttribute('points', ((startxpos + finishxpos)/2 - 40) + ',' + -1 + ' ' + ((startxpos + finishxpos)/2 - 40) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2 + 40) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2 + 40) + ',' + -1)
+              polygon.setAttribute('points', ((startxpos + finishxpos)/2) + ',' + -1 + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + ((startxpos + finishxpos)/2) + ',' + -1)
+              if (connect == "connect34") {
+                polygon.setAttribute('points', (startxpos + start.offsetWidth/5) + ',' + -1 + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (finish.getBoundingClientRect().left + finish.offsetWidth/2) + ',' + (Math.sqrt(Math.pow((startypos-finishypos), 2)) - (start.offsetHeight + finish.offsetHeight)/2 + 5) + ' ' + (startxpos + start.offsetWidth/5) + ',' + -1)
+              }
+              polygon.style = 'fill:rgb(0, 0, 0); stroke:rgb(253, 253, 253); stroke-width:2px;'
+              svg.appendChild(polygon);
+            }
+          }
+        }, 1)
+      }
   if (this.checked) {
     for (var i = 0; i < mtabs.length; ++i) {
-      document.getElementsByClassName(mtabs[i] + 'section')[0].classList.remove('hide');
+      document.getElementsByClassName(mtabs[i])[0].classList.remove('hide');
     }
   } else {
     for (var i = 0; i < mtabs.length; ++i) {
-      if (document.getElementById(mtabs[i] + 'id').checked == false) document.getElementsByClassName(mtabs[i] + 'section')[0].classList.add('hide');
+      if (document.getElementById(mtabs[i]).checked == false) document.getElementsByClassName(mtabs[i])[0].classList.add('hide');
     }
   }
 }
@@ -589,7 +736,7 @@ function pad(n, length) {
 }
 // this opens the overlay and displays the names and ids of all the choices
 document.getElementById('check').onclick = function () {
-  countervars = [FPcounter, CPcounter]
+  countervars = [FPcounter, CPcounter, SPcounter, Ccounter]
   const selections = [];
   document.getElementById('check2').innerHTML = "";
   document.getElementById('check2').value = "";
@@ -626,6 +773,12 @@ document.getElementById('check').onclick = function () {
           } else if (x == 1) {
             document.getElementById('check2').innerHTML = document.getElementById('check2').innerHTML + "+" + countervars[x] + " CP -" + countervars[x]*2 + "FP, "
             document.getElementById('check2').value = document.getElementById('check2').value + "+" + countervars[x] + " CP -" + countervars[x]*2 + "FP, "
+          } else if (x == 2) {
+            document.getElementById('check2').innerHTML = document.getElementById('check2').innerHTML + "+" + countervars[x] + " SP -" + countervars[x]*2 + "CP, "
+            document.getElementById('check2').value = document.getElementById('check2').value + "+" + countervars[x] + " SP -" + countervars[x]*2 + "CP, "
+          } else if (x == 3) {
+            document.getElementById('check2').innerHTML = document.getElementById('check2').innerHTML + "+" + countervars[x] + " CR -" + countervars[x]*2 + "CP, "
+            document.getElementById('check2').value = document.getElementById('check2').value + "+" + countervars[x] + " CR -" + countervars[x]*2 + "CP, "
           } else {
             document.getElementById('check2').innerHTML = document.getElementById('check2').innerHTML + counternames[x] + countervars[x] + "], "
             document.getElementById('check2').value = document.getElementById('check2').value + counternames[x] + countervars[x] + "], "
@@ -712,7 +865,7 @@ document.getElementById('import').onclick = function () {
             }
           }
         }
-        var countervars = [FPcounter, CPcounter]
+        var countervars = [FPcounter, CPcounter, SPcounter, Ccounter]
         for (var x = 0; x < counterids.length; ++x) {
           if (selections[i].substr(0, 1) == alphabet[x] && selections[i].substr(1, 3).match(/^[0-9]+$/) != null){
             if (x == 0) {
@@ -861,6 +1014,18 @@ document.getElementById('removeCP').onblur = function () {
   document.querySelectorAll('.ripple').forEach(e => e.remove())
 }
 
+document.getElementById('0131').oninput = function () {
+  multiplerequired(0, 0, 5, 0, this, ['0134'], ['0132'])
+  incompatible(0, 0, 0, 0, this, ['0133'])
+}
+document.getElementById('0132').oninput = function () {
+  multiplerequired(0, 0, 5, 0, this, ['0134'], ['0131'])
+  incompatible(0, 0, 0, 0, this, ['0135', '0136'])
+}
+document.getElementById('0142').oninput = function () {
+  multiplerequired(0, 0, 5, 0, this, ['0147'], ['0143'])
+  incompatible(0, 0, 0, 0, this, ['0146'])
+}
 // these are just choices that need to do multiple functions since you can't really do that in the html file
 // document.getElementById('tjz1').oninput = function () {
 //   multiplerequired(-7, 0, this, ['o80q'], ['uwde'])
